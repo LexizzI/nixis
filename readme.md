@@ -1,6 +1,3 @@
-Aquí tienes el código completo del `README.md` formateado correctamente en un solo bloque continuo, sin espacios extra ni saltos extraños, listo para que lo copies y pegues sin problemas:
-
-```markdown
 # Nixis Bot
 
 Un bot de Discord minimalista, seguro y de alto rendimiento diseñado para la monitorizacion e integracion de servidores de Minecraft.
@@ -66,5 +63,3 @@ python3 main.py
 
 - El bot implementa verificacion estricta de permisos utilizando IDs de rol unicos para evitar vulnerabilidades de manipulacion de nombres.
 - No almacena ni expone tokens de API ni claves privadas en el historial de Git.
-
-```
