@@ -12,6 +12,7 @@ load_dotenv()
 bot_token = os.getenv("DISCORD_SK")
 mc_ip = os.getenv("MC_SERVER_IP")
 mc_port = os.getenv("MC_SERVER_PORT")
+servername = os.getenv("MC_SERVER_NAME")
 
 if mc_ip and mc_port is None:
     print("ERROR!: No se ha definido una ip y puerto de minecraft server en el .env")
@@ -38,7 +39,7 @@ async def rpc_update():
         server = await JavaServer.async_lookup(f"{mc_ip}:{mc_port}")
         status = await server.async_status()
         
-        presence_text = f"Selunecraft [{status.players.online}/{status.players.max}] - En linea!"
+        presence_text = f"{servername} [{status.players.online}/{status.players.max}] - En linea!"
         
         await bot.change_presence(activity=discord.Game(name=presence_text))
         
