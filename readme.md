@@ -1,65 +1,47 @@
 # Nixis Bot
 
-Un bot de Discord minimalista, seguro y de alto rendimiento diseñado para la monitorizacion e integracion de servidores de Minecraft.
+Motor de bot de Discord minimalista y modular para la monitorizacion e integracion de servidores de Minecraft.
 
-## Descripción
+## Descripcion
 
-Nixis Bot proporciona monitorizacion en tiempo real del estado de un servidor de Minecraft, ademas de herramientas de administracion minimalistas para gestionar la lista blanca (whitelist) a traves de roles especificos en Discord.
+Nixis Bot esta disenado como una base limpia y ligera. Proporciona comandos esenciales y monitorizacion pasiva mediante Server List Ping, permitiendo extender la funcionalidad con sistemas propios (como la gestion de whitelist) segun las necesidades de cada infraestructura.
 
-El proyecto esta construido con un enfoque en la simplicidad, evitandose la sobrecarga de datos y priorizando la seguridad de la infraestructura subyacente.
+## Caracteristicas
 
-## Características
-
-- Monitorización pasiva de estado del servidor mediante el protocolo Server List Ping.
-- Consulta de ip y estado sin exponer puertos de gestion ni servicios criticos.
-- Gestion de lista blanca restringida mediante control de acceso basado en roles (RBAC) con IDs unicos.
-- Diseno minimalista de respuestas orientadas a la claridad y velocidad.
-- Arquitectura basada en variables de entorno para una gestion segura de credenciales.
+- Monitorizacion pasiva del estado del servidor.
+- Estructura modular basada en extensiones de Discord.py.
+- Configuracion mediante variables de entorno (.env).
+- Codigo limpio y directo, sin dependencias innecesarias.
 
 ## Estructura del Proyecto
 
 nixis_bot/
-├── main.py            # Punto de entrada principal del bot
-├── .env               # Variables de entorno (Token, IP, etc.) [No incluir en repositorio]
-├── .gitignore         # Archivo de exclusion de Git
-└── README.md          # Documentación del proyecto
+├── main.py            # Punto de entrada principal
+├── .env               # Variables de entorno locales [Ignorado por Git]
+├── .gitignore         # Archivos excluidos del control de versiones
+└── README.md          # Documentacion del proyecto
 
-## Requisitos Previos
+## Instalacion y Puesta en Marcha
 
-- Python 3.10 o superior
-- Una aplicacion registrada en el Portal de Desarrolladores de Discord
-- Servidor de Minecraft activo (para consultas de estado)
-
-## Instalación
-
-1. Clona este repositorio en tu maquina local:
+1. Clona el repositorio:
    git clone https://github.com/tu-usuario/nixis_bot.git
    cd nixis_bot
 
-2. Crea un entorno virtual e instala las dependencias necesarias:
+2. Configura tu entorno virtual e instala las dependencias:
    python3 -m venv venv
-   source venv/bin/activate  # En macOS / Linux
+   source venv/bin/activate
    pip install discord.py mcstatus python-dotenv
 
-3. Crea un archivo `.env` en la raiz del proyecto con el siguiente contenido:
+3. Crea tu propio archivo `.env` basado en la configuracion de tu entorno:
    DISCORD_TOKEN=tu_token_aqui
    SERVER_IP=tu_ip_aqui
-   SERVER_PORT=19000
+   SERVER_PORT=tu_puerto_aqui
 
-## Uso
+4. Ejecuta el motor:
+   python3 main.py
 
-Para iniciar el bot en modo local o de desarrollo:
+## Comandos Base
 
-python3 main.py
-
-## Comandos Principales
-
-- `!nixis-status` - Muestra el estado actual y disponibilidad del servidor de Minecraft.
-- `!nixis-help` - Lista los comandos disponibles y su sintaxis.
+- `!nixis-status` - Comprueba el estado actual del servidor configurado.
+- `!nixis-help` - Muestra la lista de comandos disponibles.
 - `!ip` - Muestra la direccion de conexion del servidor.
-- `!whitelist <nick>` - Gestiona la entrada de usuarios en la lista blanca (Requiere rol autorizado).
-
-## Seguridad
-
-- El bot implementa verificacion estricta de permisos utilizando IDs de rol unicos para evitar vulnerabilidades de manipulacion de nombres.
-- No almacena ni expone tokens de API ni claves privadas en el historial de Git.
