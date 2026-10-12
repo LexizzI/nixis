@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from mcstatus import JavaServer
 from discord.ext import commands
 from discord.ext import tasks
+from mcrcon import MCRcon
 import discord
 import os
 
@@ -13,8 +14,10 @@ bot_token = os.getenv("DISCORD_SK")
 mc_ip = os.getenv("MC_SERVER_IP")
 mc_port = os.getenv("MC_SERVER_PORT")
 servername = os.getenv("MC_SERVER_NAME")
+rcon = os.getenv("RCON_PORT")
+rcon_pswd = os.getenv("RCON_PSWD")
 
-if mc_ip and mc_port is None:
+if not mc_ip or not mc_port:
     print("ERROR!: No se ha definido una ip y puerto de minecraft server en el .env")
 else:
     print(f"INFO: Definida la ip del server correctamente!")
@@ -51,6 +54,22 @@ async def rpc_update():
 async def on_ready():
     rpc_update.start()
     print(f"Hola! Soy {bot.user.name}, todos los parametros correctos, lista para funcionar!")
+
+
+
+def send_rcon_command(command: str) -> str:
+    try:
+
+        if not mc_ip or not rcon or not rcon_pswd:
+            return "ERROR: Faltan variables de RCON en el .env"
+        with MCRcon(mc_ip, rcon_pswd, int(rcon)) as mcr:
+            return mcr.command(command)
+    
+    except Exception as exc:
+        print(f"ERROR: No se pudo ejecutar el comando de RCON: {exc}")
+        return f"ERROR: {exc}"
+
+
     
 
 # bloque con las funciones de los comandos
@@ -59,10 +78,10 @@ async def on_ready():
 async def help(ctx):
     print(f"INFO: El usuario {ctx.author} ha solicitado el comando de ayuda")
     await ctx.send(
-        f"***Comandos de {bot.user.name}***\n"
-        f"**!nixis** *El bot saluda al usuario*\n"
-        f"**!nixis-help** *muestra este texto*\n"
-        f"**!nixis-status** *muestra datos sobre el estado del servidor*\n"
+        f"Comandos de {bot.user.name}\n"
+        f"!nixis El bot saluda al usuario\n"
+        f"!nixis-help muestra este texto\n"
+        f"!nixis-status muestra datos sobre el estado del servidor\n"
     )
 
 
@@ -78,13 +97,49 @@ async def mcstatus(ctx):
     try:
         server = await JavaServer.async_lookup(f"{mc_ip}:{mc_port}")
         status = await server.async_status()
+        playerlist = status.players.sample
+        names = ", ".join([p.name for p in playerlist]) if playerlist else "Ninguno"
         await ctx.send(
-            f"***Server status: ONLINE***\n"
+            f"**Server status:** ***ONLINE***\n"
             f"**Jugadores conectados:** {status.players.online}/{status.players.max}\n"
             f"**Ping:** {status.latency}ms\n"
-            f"**Usuarios:** {status.players.sample}\n"
+            f"**Usuarios:** {names}"
         )
     except Exception:
         await ctx.send("***El servidor esta apagado o no responde!***")
+
+
+
+@bot.command(name="nixis-whitelist-add")
+async def whitelist_add(ctx, nick: str):
+
+    rol_id = 1559233089207541800
+    has_rol = any(role.id == rol_id for role in ctx.author.roles)
+
+    if not has_rol:
+        await ctx.send(f"Lo siento {ctx.author}, pero no posees los permisos para solicitar esta funcion!")
+
+        return
+  
+    print(
+        f"INFO: Solicitud de whitelist para '{nick}' por {ctx.author}"
+    )  # (Opcional) Aquí podrías comprobar permisos/roles de Discord antes de ejecutar
+
+    # Enviamos el comando RCON
+    response = send_rcon_command(f"whitelist add {nick}")
+
+    if response:
+        await ctx.send(
+            f"**Whitelist:** Usuario `{nick}` añadido correctamente.\n"
+            f"- Respuesta consola: {response.strip()}"
+        )
+    else:
+        await ctx.send(
+            "**Error:** No se pudo conectar con la consola RCON del servidor."
+        )
+
+
+
+
 
 bot.run(bot_token)
