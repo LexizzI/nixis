@@ -1,4 +1,4 @@
-# Minecraft Discord Bot (Practice Project)
+# NIXIS | Minecraft Discord Bot (Practice Project)
 
 A simple, straightforward Discord bot written in Python to practice asynchronous programming, API integration, and bot development by managing a few basic Minecraft server functions. 
 
