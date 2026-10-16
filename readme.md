@@ -1,47 +1,53 @@
-# Nixis Bot
+# Minecraft Discord Bot (Practice Project)
 
-Motor de bot de Discord minimalista y modular para la monitorizacion e integracion de servidores de Minecraft.
+A simple, straightforward Discord bot written in Python to practice asynchronous programming, API integration, and bot development by managing a few basic Minecraft server functions. 
 
-## Descripcion
+> ⚠️ **Disclaimer:** This is just a personal practice project to learn Python and Discord bot development. It is not intended to be a production-ready or fully secure tool (especially regarding the use of RCON). Use it for learning and experimentation!
 
-Nixis Bot esta disenado como una base limpia y ligera. Proporciona comandos esenciales y monitorizacion pasiva mediante Server List Ping, permitiendo extender la funcionalidad con sistemas propios (como la gestion de whitelist) segun las necesidades de cada infraestructura.
+---
 
-## Caracteristicas
+## Features
 
-- Monitorizacion pasiva del estado del servidor.
-- Estructura modular basada en extensiones de Discord.py.
-- Configuracion mediante variables de entorno (.env).
-- Codigo limpio y directo, sin dependencias innecesarias.
+* **Rich Presence (RPC) Loop:** Continuously updates the bot's Discord activity status with the server's online player count (or shows as offline if it's down).
+* **Server Status Check (`!nixis-status`):** Quick command to check if the Minecraft server is online, view the current player count, latency (ping), and a list of online players.
+* **Whitelist Management (`!nixis-whitelist-add`):** Allows users with a specific Discord role to add a Minecraft username directly to the server's whitelist using RCON.
+* **Basic Greetings & Help:** Simple commands (`!nixis`, `!nixis-help`) to interact with the bot.
 
-## Estructura del Proyecto
+---
 
-nixis_bot/
-├── main.py            # Punto de entrada principal
-├── .env               # Variables de entorno locales [Ignorado por Git]
-├── .gitignore         # Archivos excluidos del control de versiones
-└── README.md          # Documentacion del proyecto
+## Prerequisites & Requirements
 
-## Instalacion y Puesta en Marcha
+Before running the bot, make sure you have:
+* Python installed.
+* A registered Discord Bot application (with Message Content Intent enabled).
+* A Minecraft server with RCON enabled (optional, but needed for whitelist commands).
 
-1. Clona el repositorio:
-   git clone https://github.com/tu-usuario/nixis_bot.git
-   cd nixis_bot
+### Dependencies
+Install the required Python packages using pip:
+```bash
+pip install discord.py mcstatus python-dotenv mcrcon
+```
 
-2. Configura tu entorno virtual e instala las dependencias:
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install discord.py mcstatus python-dotenv
+---
 
-3. Crea tu propio archivo `.env` basado en la configuracion de tu entorno:
-   DISCORD_TOKEN=tu_token_aqui
-   SERVER_IP=tu_ip_aqui
-   SERVER_PORT=tu_puerto_aqui
+## Configuration (`.env`)
 
-4. Ejecuta el motor:
-   python3 main.py
+Create a `.env` file in the root directory of your project and fill in your credentials and server details:
 
-## Comandos Base
+```env
+DISCORD_SK=
+MC_SERVER_IP=
+MC_SERVER_PORT=
+MC_SERVER_NAME=
+RCON_PORT=
+RCON_PSWD=  
+```
 
-- `!nixis-status` - Comprueba el estado actual del servidor configurado.
-- `!nixis-help` - Muestra la lista de comandos disponibles.
-- `!ip` - Muestra la direccion de conexion del servidor.
+---
+
+## Running the Bot
+
+Once your `.env` file is configured and dependencies are installed, run the script:
+
+```bash
+python bot.py
